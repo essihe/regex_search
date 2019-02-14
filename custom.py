@@ -1,6 +1,6 @@
-import tkinter as tk
+from tkinter import scrolledtext
 
-class CustomText(tk.scrolledtext.ScrolledText):
+class CustomText(scrolledtext.ScrolledText):
     '''A text widget with a new method, highlight_pattern()
 
     example:
@@ -27,12 +27,19 @@ class CustomText(tk.scrolledtext.ScrolledText):
         self.mark_set("matchEnd", start)
         self.mark_set("searchLimit", end)
 
+        freq = 0
         count = tk.IntVar()
         while True:
             index = self.search(pattern, "matchEnd","searchLimit",
                                 count=count, regexp=regexp)
-            if index == "": break
-            if count.get() == 0: break # degenerate pattern which matches zero-length strings
+            if index == "": 
+                break
+            else:
+                freq += 1
+            if count.get() == 0: 
+                break # degenerate pattern which matches zero-length strings
             self.mark_set("matchStart", index)
             self.mark_set("matchEnd", "%s+%sc" % (index, count.get()))
             self.tag_add(tag, "matchStart", "matchEnd")
+
+        return freq 
